@@ -1,6 +1,10 @@
 // app/api/get-userid/route.ts
 import { NextRequest } from 'next/server';
 
+export async function GET() {
+  return new Response('Webhook endpoint ready (GET)', { status: 200 });
+}
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
