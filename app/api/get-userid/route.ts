@@ -1,8 +1,7 @@
-// app/api/get-userid/route.ts
 import { NextRequest } from 'next/server';
 
 export async function GET() {
-  return new Response('Webhook endpoint ready (GET)', { status: 200 });
+  return new Response('OK', { status: 200 });
 }
 
 export async function POST(req: NextRequest) {
@@ -35,3 +34,4 @@ export async function POST(req: NextRequest) {
     return new Response(JSON.stringify({ error: 'Internal Server Error' }), { status: 500 });
   }
 }
+
