@@ -1,14 +1,14 @@
-import { NextRequest } from 'next/server';
+import { NextRequest } from 'next/server'
 
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json();
-    const events = body.events || [];
-    const userId = events[0]?.source?.userId;
-    const replyToken = events[0]?.replyToken;
-    const token = process.env.LINE_CHANNEL_ACCESS_TOKEN;
+    const body = await req.json()
+    const events = body.events || []
+    const userId = events[0]?.source?.userId
+    const replyToken = events[0]?.replyToken
+    const token = process.env.LINE_CHANNEL_ACCESS_TOKEN
 
-    console.log("✅ ユーザーID取得:", userId);
+    console.log("✅ ユーザーID取得:", userId)
 
     if (replyToken && token) {
       await fetch('https://api.line.me/v2/bot/message/reply', {
@@ -21,12 +21,12 @@ export async function POST(req: NextRequest) {
           replyToken,
           messages: [{ type: 'text', text: `あなたのuserIdは：${userId}` }],
         }),
-      });
+      })
     }
 
-    return new Response(JSON.stringify({ userId }), { status: 200 });
+    return new Response(JSON.stringify({ userId }), { status: 200 })
   } catch (error) {
-    console.error("❌ エラー発生:", error);
-    return new Response(JSON.stringify({ error: 'Internal Server Error' }), { status: 500 });
+    console.error("❌ エラー発生:", error)
+    return new Response(JSON.stringify({ error: 'Internal Server Error' }), { status: 500 })
   }
 }
