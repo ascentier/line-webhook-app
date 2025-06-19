@@ -46,7 +46,7 @@ ${formattedDate}
 
     return new Response('OK', { status: 200 });
   } catch (err) {
-    console.error('LINE通知エラー:', err);
+    console.error('エラー:', err);
     return new Response('Server Error', { status: 500 });
   }
 }
