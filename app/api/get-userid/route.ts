@@ -1,20 +1,17 @@
+// app/api/get-userid/route.ts
 import { NextRequest } from 'next/server';
-
-export async function GET() {
-  return new Response('OK', { status: 200 });
-}
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const events = body.events || [];
-    const userId = events[0]?.source?.userId;
-    const replyToken = events[0]?.replyToken;
+    console.log("📦 受信したbody:", JSON.stringify(body, null, 2));
+    const event = body.events?.[0];
+    const userId = event?.source?.userId;
+    const replyToken = event?.replyToken;
     const token = process.env.LINE_CHANNEL_ACCESS_TOKEN;
+    console.log('✅ LINEトークン:', token);
 
-    console.log('✅ ユーザーID取得:', userId);
-
-    if (replyToken && token) {
+    if (replyToken && token && userId) {
       await fetch('https://api.line.me/v2/bot/message/reply', {
         method: 'POST',
         headers: {
@@ -26,11 +23,16 @@ export async function POST(req: NextRequest) {
           messages: [{ type: 'text', text: `あなたのuserIdは: ${userId}` }],
         }),
       });
-    }
 
-    return new Response(JSON.stringify({ userId }), { status: 200 });
-  } catch (error) {
-    console.error('❌ エラー発生:', error);
-    return new Response(JSON.stringify({ error: 'Internal Server Error' }), { status: 500 });
+      return new Response('OK', { status: 200 });
+    } else {
+      return new Response('Missing data', { status: 400 });
+    }
+  } catch (err) {
+    return new Response('Server Error', { status: 500 });
   }
+}
+
+export async function GET() {
+  return new Response('OK', { status: 200 });
 }
