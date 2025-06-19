@@ -1,9 +1,7 @@
-// app/api/contact/route.ts
-import { NextRequest } from 'next/server';
-
 export async function POST(req: NextRequest) {
   try {
     const formData = await req.formData();
+
     const name = formData.get('name')?.toString() || '';
     const email = formData.get('email')?.toString() || '';
     const phone = formData.get('phone')?.toString() || '';
@@ -25,7 +23,7 @@ ${message}
 
 🗓️受付日時
 ${formattedDate}
-    `.trim();
+`.trim();
 
     const token = process.env.LINE_CHANNEL_ACCESS_TOKEN;
     const userId = process.env.LINE_ADMIN_USER_ID;
@@ -34,7 +32,7 @@ ${formattedDate}
       return new Response('LINE設定未定義', { status: 500 });
     }
 
-    const res = await fetch('https://api.line.me/v2/bot/message/push', {
+    await fetch('https://api.line.me/v2/bot/message/push', {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -46,15 +44,9 @@ ${formattedDate}
       }),
     });
 
-    if (!res.ok) {
-      const errText = await res.text();
-      console.error('LINE APIエラー:', errText);
-      return new Response('LINE送信失敗', { status: 500 });
-    }
-
-    return new Response('送信成功', { status: 200 });
-  } catch (error) {
-    console.error('サーバーエラー:', error);
+    return new Response('OK', { status: 200 });
+  } catch (err) {
+    console.error('エラー:', err); // ← ここでエラー変数を使うことで解決
     return new Response('Server Error', { status: 500 });
   }
 }
