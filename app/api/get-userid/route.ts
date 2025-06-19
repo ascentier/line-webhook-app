@@ -37,3 +37,4 @@ export async function POST(req: NextRequest) {
 export async function GET() {
   return new Response('OK', { status: 200 });
 }
+/* eslint-disable @typescript-eslint/no-unused-vars */
