@@ -29,6 +29,7 @@ export async function POST(req: NextRequest) {
       return new Response('Missing data', { status: 400 });
     }
   } catch (err) {
+    console.error('エラー(get-userid):', err);
     return new Response('Server Error', { status: 500 });
   }
 }
